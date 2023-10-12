@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Laken's Wordle</title>
+    <style>
+      .letters {
+        color:white;
+        background-color: gray;
+        font-weight:bold;
+        padding:10px;
+        margin-right: 4px;
+        border-radius: 3px;
+        box-shadow: 0 0 2px white;
+        }
+      p {
+        padding: 10px
+      }
+      body {
+        background-color: #22333b;
+        display:grid;
+        justify-content: center;
+        align-items: center;
+        font-family; "Times New Roman"
+      }
+      button {
+        margin-bottom:10px;
+        width: 80%;
+        padding: 10px;
+        border-radius:10px;
+        background-color: #ff6d00;
+        color: white;
+        text-shadow: 0 0 2px black;
+        font-weight: bold;
+        transition: background-color 1s, box-shadow 1s;
+        border-style: none;
+      }
+      div {
+        margin-top: 14vw;
+        background-color: #0a0908;
+        border-radius:10px;
+        box-shadow: 0 0 100px #0a0908;
+        text-align: center;
+        width: 100%;
+      }
+      button:hover {
+        background-color: #ff9e00;
+        box-shadow: 0 0 10px #ff9e00;
+      }
+      input {
+        width: 80%;
+        margin-bottom:10px;
+        padding: 10px;
+        font-weight: bold;
+        text-align: center;
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <p style="color: white; font-weight:bold;">
+      Super Simple Wordle By Laken
+      </p>
+      <input placeholder="5 Letter Word Here" id="inputText" type="text">
+      <button onClick="submitText()">
+        Submit Word
+      </button>
+    </div>
+    <script>
+      let tries = 0;
+      var JSONready = false
+      let request = new XMLHttpRequest();
+      request.open("GET", "https://random-word-api.herokuapp.com/word?length=5");
+      request.send();
+      request.onload = () => {
+        if (request.status == 200) {
+          console.log(JSON.parse(request.response));
+          JSONready = true
+        };
+      };
+      function submitText() {
+        var inputText = (document.getElementById('inputText').value).toLowerCase()
+        let inputWordRequest = new XMLHttpRequest();
+        inputWordRequest.open("GET", "https://api.dictionaryapi.dev/api/v2/entries/en/"+inputText);
+        inputWordRequest.send();
+        inputWordRequest.onload = () => {
+        if (((inputText.length == 5)&&JSONready)&&(inputWordRequest.status == 200)) {
+          let theWord = JSON.parse(request.response)
+          if (inputText == theWord) {
+            document.body.style.backgroundColor = "green"
+            return
+          }
+          let container = document.createElement('p');
+          let letter1 = document.createElement('a');
+          let letter2 = document.createElement('a');
+          let letter3 = document.createElement('a');
+          let letter4 = document.createElement('a');
+          let letter5 = document.createElement('a');
+          letter1.classList.add("letters")
+          letter2.classList.add("letters")
+          letter3.classList.add("letters")
+          letter4.classList.add("letters")
+          letter5.classList.add("letters")
+          letter1.innerText = ((""+inputText).charAt(0));
+          letter2.innerText = ((""+inputText).charAt(1));
+          letter3.innerText = ((""+inputText).charAt(2));
+          letter4.innerText = ((""+inputText).charAt(3));
+          letter5.innerText = ((""+inputText).charAt(4));
+          container.appendChild(letter1);
+          container.appendChild(letter2);
+          container.appendChild(letter3);
+          container.appendChild(letter4);
+          container.appendChild(letter5);
+          document.body.appendChild(container)
+          if (((""+inputText).charAt(0))==((""+theWord).charAt(0))) {
+            letter1.style.backgroundColor = "green"
+          } else if ((""+theWord).includes((""+inputText).charAt(0))) {
+            letter1.style.backgroundColor = "#ff7b00"
+          }
+          if (((""+inputText).charAt(1))==((""+theWord).charAt(1))) {
+            letter2.style.backgroundColor = "green"
+          } else if ((""+theWord).includes((""+inputText).charAt(1))) {
+            letter2.style.backgroundColor = "#ff7b00"
+          }
+          if (((""+inputText).charAt(2))==((""+theWord).charAt(2))) {
+            letter3.style.backgroundColor = "green"
+          } else if ((""+theWord).includes((""+inputText).charAt(2))) {
+            letter3.style.backgroundColor = "#ff7b00"
+          }
+          if (((""+inputText).charAt(3))==((""+theWord).charAt(3))) {
+            letter4.style.backgroundColor = "green"
+          } else if ((""+theWord).includes((""+inputText).charAt(3))) {
+            letter4.style.backgroundColor = "#ff7b00"
+          }
+          if (((""+inputText).charAt(4))==((""+theWord).charAt(4))) {
+            letter5.style.backgroundColor = "green"
+          } else if ((""+theWord).includes((""+inputText).charAt(4))) {
+            letter5.style.backgroundColor = "#ff7b00"
+          }
+          window.scrollTo(0, document.body.scrollHeight);
+        }
+      	}
+      };
+    </script>
+  </body>
+</html>
